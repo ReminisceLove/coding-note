@@ -7,23 +7,18 @@ import java.util.List;
 
 public class LC_0032_LongestValidParentheses {
     public int longestValidParentheses(String s) {
-        List<Character> list = new ArrayList<>();
-        List<Integer> ans = new ArrayList<>();
-        int temp = 0;
-        int left = 0;
-        for (int i = 0; i < s.length(); i++) {
-            if (list.size() == 0) {
-                list.add(s.charAt(i));
-            } else {
-                if (s.charAt(i) == '(') {
-                    list.add(s.charAt(i));
-                } else {
-                    if (list.get(list.size() - 1) == '(') {
-                        ans.get(temp)
-                    }
+        int maxans = 0;
+        int[] dp = new int[s.length()];
+        for (int i = 1; i < s.length(); i++) {
+            if (s.charAt(i) == ')') {
+                if (s.charAt(i - 1) == '(') {
+                   dp[i] = (i >= 2 ? dp[i - 2] : 0) + 2;
+                } else if (i - dp[i - 1] > 0 && s.charAt(i - dp[i - 1] - 1) == '(') {
+                   dp[i] = dp[i - 1] + ((i - dp[i - 1]) >= 2 ? dp[i - dp[i - 1] - 2] : 0) + 2;
                 }
+                maxans = Math.max(maxans, dp[i]);
             }
         }
-        return ans * 2;
+        return maxans;
     }
 }
